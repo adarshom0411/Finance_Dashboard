@@ -226,11 +226,14 @@ A simple React-based UI was added to:
 
 ---
 
-## 🔗 Links
+## 🌐 Live Demo
 
-- 🌐 Live App: https://finance-dashboard-mu-mauve.vercel.app
-- ⚙ Backend API: https://finance-backend-s248.onrender.com
-- 💻 GitHub Repo: https://github.com/adarshom0411/Finance_Dashboard
+Frontend: https://finance-dashboard-mu-mauve.vercel.app  
+Backend API: https://finance-backend-s248.onrender.com/api
+
+### Demo Credentials
+Email: admin@example.com  
+Password: Admin@123
 
 ---
 
