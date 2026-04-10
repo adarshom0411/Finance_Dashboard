@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Global Styles ===== */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  background-color: #f9fafb; /* light gray background */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Reusable Components ===== */
+
+.input {
+  @apply w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500;
+}
+
+.button-primary {
+  @apply w-full bg-indigo-500 text-white p-2 rounded-md hover:bg-indigo-600 transition;
+}
+
+.card {
+  @apply bg-white p-6 rounded-xl shadow-md;
+}
