@@ -26,7 +26,7 @@ exports.getRecords = async (req, res, next) => {
     if (keyword) {
       filter.$or = [
         { category: { $regex: keyword, $options: "i" } },
-        { notes: { $regex: keyword, $options: "i" } }
+        { note: { $regex: keyword, $options: "i" } }
       ];
     }
 
