@@ -5,8 +5,13 @@ const ROLES = {
 };
 
 const ROLE_PERMISSIONS = {
-  [ROLES.VIEWER]: ["dashboard:read"],
+  // =======================================================
+  // ✅ FIXED: Viewer should also read records
+  // =======================================================
+  [ROLES.VIEWER]: ["dashboard:read", "records:read"],
+
   [ROLES.ANALYST]: ["dashboard:read", "records:read"],
+
   [ROLES.ADMIN]: [
     "dashboard:read",
     "records:read",

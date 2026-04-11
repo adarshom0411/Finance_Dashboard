@@ -20,3 +20,19 @@ exports.deleteUser = asyncHandler(async (req, res) => {
   await userService.deleteUser(req.params.id);
   res.json({ success: true, message: "Deleted" });
 });
+
+
+// =======================================================
+// ✅ ADDED: Deactivate User (REQUIRED)
+// =======================================================
+exports.deactivateUser = asyncHandler(async (req, res) => {
+  const user = await userService.updateUser(req.params.id, {
+    isActive: false
+  });
+
+  res.json({
+    success: true,
+    message: "User deactivated successfully",
+    data: user
+  });
+});

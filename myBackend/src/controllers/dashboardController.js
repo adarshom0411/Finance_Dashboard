@@ -1,5 +1,6 @@
 const FinancialRecord = require("../models/FinancialRecord");
 
+// ✅ EXISTING (UNCHANGED)
 exports.getSummary = async (req, res, next) => {
   try {
     const records = await FinancialRecord.find();
@@ -27,6 +28,7 @@ exports.getSummary = async (req, res, next) => {
   }
 };
 
+// ✅ EXISTING (UNCHANGED)
 exports.getCategories = async (req, res, next) => {
   try {
     const data = await FinancialRecord.aggregate([
@@ -47,6 +49,7 @@ exports.getCategories = async (req, res, next) => {
   }
 };
 
+// ✅ EXISTING (UNCHANGED)
 exports.getRecent = async (req, res, next) => {
   try {
     const records = await FinancialRecord.find()
@@ -56,6 +59,50 @@ exports.getRecent = async (req, res, next) => {
     res.json({
       success: true,
       data: records
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+
+// =======================================================
+// ✅ ADDED: Monthly Trends (REQUIRED BY ASSIGNMENT)
+// =======================================================
+
+exports.getMonthlyTrends = async (req, res, next) => {
+  try {
+    const data = await FinancialRecord.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: "$date" },
+            month: { $month: "$date" }
+          },
+          totalIncome: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "income"] }, "$amount", 0]
+            }
+          },
+          totalExpense: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0]
+            }
+          }
+        }
+      },
+      {
+        $sort: {
+          "_id.year": 1,
+          "_id.month": 1
+        }
+      }
+    ]);
+
+    res.json({
+      success: true,
+      data
     });
   } catch (err) {
     next(err);

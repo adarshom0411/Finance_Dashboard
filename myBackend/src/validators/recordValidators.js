@@ -11,7 +11,7 @@ const recordPayloadValidation = [
     .withMessage("Type must be income or expense."),
   body("category").trim().notEmpty().withMessage("Category is required."),
   body("date").isISO8601().withMessage("Date must be a valid ISO 8601 value."),
-  body("notes")
+  body("note")
     .optional()
     .isString()
     .withMessage("Notes must be a string.")
@@ -39,7 +39,7 @@ const updateRecordValidation = [
     .optional()
     .isISO8601()
     .withMessage("Date must be a valid ISO 8601 value."),
-  body("notes")
+  body("note")
     .optional()
     .isString()
     .withMessage("Notes must be a string.")

@@ -8,6 +8,8 @@ router.post("/", protect, controller.createRecord);
 
 router.get("/", protect, controller.getRecords);
 
+router.get("/:id", protect, controller.getRecordById);
+
 router.put("/:id", protect, controller.updateRecord);
 
 router.delete("/:id", protect, controller.deleteRecord);

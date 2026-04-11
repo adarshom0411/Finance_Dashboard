@@ -4,6 +4,11 @@ const FinancialRecord = require("../models/FinancialRecord");
 const AppError = require("../utils/AppError");
 const asyncHandler = require("../utils/asyncHandler");
 
+
+// =======================================================
+// ✅ MODIFIED: Added search + soft delete filter
+// =======================================================
+
 const buildRecordFilters = (query) => {
   const filters = {};
 
@@ -27,8 +32,24 @@ const buildRecordFilters = (query) => {
     filters.date.$lte = new Date(query.endDate);
   }
 
+  // ✅ ADDED: Search support
+  if (query.keyword) {
+    filters.$or = [
+      { category: { $regex: query.keyword, $options: "i" } },
+      { notes: { $regex: query.keyword, $options: "i" } }
+    ];
+  }
+
+  // ✅ ADDED: Exclude soft deleted records
+  filters.isDeleted = { $ne: true };
+
   return filters;
 };
+
+
+// =======================================================
+// ✅ EXISTING (UNCHANGED)
+// =======================================================
 
 const createRecord = asyncHandler(async (req, res) => {
   const record = await FinancialRecord.create({
@@ -44,6 +65,7 @@ const createRecord = asyncHandler(async (req, res) => {
     }
   });
 });
+
 
 const listRecords = asyncHandler(async (req, res) => {
   const page = Number(req.query.page) || 1;
@@ -72,12 +94,14 @@ const listRecords = asyncHandler(async (req, res) => {
   });
 });
 
+
 const getRecordById = asyncHandler(async (req, res) => {
   const record = await FinancialRecord.findById(req.params.id)
     .populate("createdBy", "name email role")
     .populate("updatedBy", "name email role");
 
-  if (!record) {
+  // ✅ ADDED: prevent access to deleted records
+  if (!record || record.isDeleted) {
     throw new AppError("Financial record not found.", StatusCodes.NOT_FOUND);
   }
 
@@ -88,10 +112,12 @@ const getRecordById = asyncHandler(async (req, res) => {
   });
 });
 
+
 const updateRecord = asyncHandler(async (req, res) => {
   const record = await FinancialRecord.findById(req.params.id);
 
-  if (!record) {
+  // ✅ ADDED: prevent update on deleted records
+  if (!record || record.isDeleted) {
     throw new AppError("Financial record not found.", StatusCodes.NOT_FOUND);
   }
 
@@ -106,19 +132,27 @@ const updateRecord = asyncHandler(async (req, res) => {
   });
 });
 
+
+// =======================================================
+// ✅ MODIFIED: Soft Delete instead of hard delete
+// =======================================================
+
 const deleteRecord = asyncHandler(async (req, res) => {
   const record = await FinancialRecord.findById(req.params.id);
 
-  if (!record) {
+  if (!record || record.isDeleted) {
     throw new AppError("Financial record not found.", StatusCodes.NOT_FOUND);
   }
 
-  await record.deleteOne();
+  // ✅ CHANGED: Soft delete
+  record.isDeleted = true;
+  await record.save();
 
   res.status(StatusCodes.OK).json({
-    message: "Financial record deleted successfully."
+    message: "Financial record soft deleted successfully."
   });
 });
+
 
 module.exports = {
   buildRecordFilters,
