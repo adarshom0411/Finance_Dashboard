@@ -29,9 +29,6 @@ const financialRecordSchema = new mongoose.Schema(
       required: true
     },
 
-    // =======================================================
-    // ✅ ADDED: Soft Delete Support
-    // =======================================================
     isDeleted: {
       type: Boolean,
       default: false

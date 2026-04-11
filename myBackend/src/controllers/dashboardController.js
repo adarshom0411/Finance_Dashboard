@@ -1,6 +1,5 @@
 const FinancialRecord = require("../models/FinancialRecord");
 
-// ✅ EXISTING (UNCHANGED)
 exports.getSummary = async (req, res, next) => {
   try {
     const records = await FinancialRecord.find();
@@ -28,7 +27,6 @@ exports.getSummary = async (req, res, next) => {
   }
 };
 
-// ✅ EXISTING (UNCHANGED)
 exports.getCategories = async (req, res, next) => {
   try {
     const data = await FinancialRecord.aggregate([
@@ -49,7 +47,6 @@ exports.getCategories = async (req, res, next) => {
   }
 };
 
-// ✅ EXISTING (UNCHANGED)
 exports.getRecent = async (req, res, next) => {
   try {
     const records = await FinancialRecord.find()
@@ -64,12 +61,6 @@ exports.getRecent = async (req, res, next) => {
     next(err);
   }
 };
-
-
-
-// =======================================================
-// ✅ ADDED: Monthly Trends (REQUIRED BY ASSIGNMENT)
-// =======================================================
 
 exports.getMonthlyTrends = async (req, res, next) => {
   try {

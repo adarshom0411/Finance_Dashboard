@@ -8,9 +8,6 @@ router.get("/summary", protect, dashboardController.getSummary);
 router.get("/categories", protect, dashboardController.getCategories);
 router.get("/recent", protect, dashboardController.getRecent); 
 
-// =======================================================
-// ✅ ADDED: Monthly Trends Route
-// =======================================================
 router.get("/trends", protect, dashboardController.getMonthlyTrends);
 
 module.exports = router;

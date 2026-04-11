@@ -9,7 +9,7 @@ const options = {
       description: "API documentation for Finance Dashboard backend"
     }
   },
-  apis: ["./routes/*.js"] // reads your route files
+  apis: ["./routes/*.js"] 
 };
 
 const swaggerSpec = swaggerJSDoc(options);

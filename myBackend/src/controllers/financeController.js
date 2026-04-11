@@ -1,6 +1,5 @@
 const FinancialRecord = require("../models/FinancialRecord");
 
-// ✅ EXISTING (UNCHANGED)
 exports.createRecord = async (req, res, next) => {
   try {
     const record = await FinancialRecord.create({
@@ -16,11 +15,6 @@ exports.createRecord = async (req, res, next) => {
     next(err);
   }
 };
-
-
-// =======================================================
-// ✅ MODIFIED: getRecords (pagination + search + filter)
-// =======================================================
 
 exports.getRecords = async (req, res, next) => {
   try {
@@ -59,11 +53,6 @@ exports.getRecords = async (req, res, next) => {
   }
 };
 
-
-// =======================================================
-// ✅ ADDED: Get Record By ID (THIS WAS MISSING)
-// =======================================================
-
 exports.getRecordById = async (req, res, next) => {
   try {
     const record = await FinancialRecord.findOne({
@@ -86,11 +75,6 @@ exports.getRecordById = async (req, res, next) => {
     next(err);
   }
 };
-
-
-// =======================================================
-// ✅ EXISTING (UNCHANGED)
-// =======================================================
 
 exports.updateRecord = async (req, res, next) => {
   try {
@@ -118,11 +102,6 @@ exports.updateRecord = async (req, res, next) => {
     next(err);
   }
 };
-
-
-// =======================================================
-// ✅ MODIFIED: Soft Delete
-// =======================================================
 
 exports.deleteRecord = async (req, res, next) => {
   try {

@@ -25,15 +25,8 @@ app.use(
 );
 
 app.use("/api", routes);
-
-// =======================================================
-// ✅ MOVE SWAGGER HERE (BEFORE notFound)
-// =======================================================
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// ❌ this should be AFTER swagger
 app.use(notFound);
-
 app.use(errorHandler);
 
 console.log("Routes mounted at /api");

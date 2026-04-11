@@ -13,7 +13,7 @@ exports.register = async ({ name, email, password, role }) => {
     name,
     email,
     password: hashed,
-    role: role || "viewer" // ✅ FIX: allow role from request
+    role: role || "viewer"
   });
 };
 
