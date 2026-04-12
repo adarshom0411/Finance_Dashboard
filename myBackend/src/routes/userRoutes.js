@@ -13,9 +13,6 @@ const { authorize } = require("../middlewares/roleMiddleware");
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Users fetched
  */
 router.get("/", protect, authorize("admin"), controller.getUsers);
 
@@ -27,9 +24,15 @@ router.get("/", protect, authorize("admin"), controller.getUsers);
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     responses:
- *       201:
- *         description: User created
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             name: "User1"
+ *             email: "user1@example.com"
+ *             password: "Admin@123"
+ *             role: "analyst"
  */
 router.post("/", protect, authorize("admin"), controller.createUser);
 
@@ -47,9 +50,11 @@ router.post("/", protect, authorize("admin"), controller.createUser);
  *         required: true
  *         schema:
  *           type: string
- *     responses:
- *       200:
- *         description: User updated
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           example:
+ *             name: "Updated User"
  */
 router.put("/:id", protect, authorize("admin"), controller.updateUser);
 
@@ -67,9 +72,6 @@ router.put("/:id", protect, authorize("admin"), controller.updateUser);
  *         required: true
  *         schema:
  *           type: string
- *     responses:
- *       200:
- *         description: User deleted
  */
 router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
 
@@ -87,9 +89,6 @@ router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
  *         required: true
  *         schema:
  *           type: string
- *     responses:
- *       200:
- *         description: User deactivated
  */
 router.patch("/:id/deactivate", protect, authorize("admin"), controller.deactivateUser);
 

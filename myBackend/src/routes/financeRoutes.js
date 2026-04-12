@@ -8,10 +8,20 @@ const { protect } = require("../middlewares/authMiddleware");
  * @swagger
  * /finance:
  *   post:
- *     summary: Create record
+ *     summary: Create financial record
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             amount: 5000
+ *             type: "income"
+ *             category: "Salary"
+ *             date: "2026-04-12"
+ *             note: "Monthly salary"
  *     responses:
  *       201:
  *         description: Record created
@@ -26,6 +36,15 @@ router.post("/", protect, controller.createRecord);
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: number
  *     responses:
  *       200:
  *         description: Records fetched
@@ -46,9 +65,6 @@ router.get("/", protect, controller.getRecords);
  *         required: true
  *         schema:
  *           type: string
- *     responses:
- *       200:
- *         description: Record fetched
  */
 router.get("/:id", protect, controller.getRecordById);
 
@@ -66,9 +82,16 @@ router.get("/:id", protect, controller.getRecordById);
  *         required: true
  *         schema:
  *           type: string
- *     responses:
- *       200:
- *         description: Record updated
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             amount: 3000
+ *             type: "expense"
+ *             category: "Food"
+ *             date: "2026-04-12"
+ *             note: "Dinner"
  */
 router.put("/:id", protect, controller.updateRecord);
 
@@ -86,9 +109,6 @@ router.put("/:id", protect, controller.updateRecord);
  *         required: true
  *         schema:
  *           type: string
- *     responses:
- *       200:
- *         description: Record deleted
  */
 router.delete("/:id", protect, controller.deleteRecord);
 
