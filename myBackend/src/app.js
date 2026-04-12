@@ -14,11 +14,12 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*", // allow all origins (safe for assignment/demo)
+    origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+app.options("*", cors());
 app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"));
