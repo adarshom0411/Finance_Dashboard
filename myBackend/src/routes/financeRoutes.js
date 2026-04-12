@@ -6,9 +6,16 @@ const { protect } = require("../middlewares/authMiddleware");
 
 /**
  * @swagger
+ * tags:
+ *   name: Finance
+ *   description: Financial records management APIs
+ */
+
+/**
+ * @swagger
  * /finance:
  *   post:
- *     summary: Create a financial record
+ *     summary: Create financial record
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
@@ -16,32 +23,15 @@ const { protect } = require("../middlewares/authMiddleware");
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - date
- *               - category
- *               - type
- *               - amount
- *             properties:
- *               date:
- *                 type: string
- *                 example: 2026-04-12
- *               category:
- *                 type: string
- *                 example: Food
- *               type:
- *                 type: string
- *                 example: expense
- *               amount:
- *                 type: number
- *                 example: 500
- *               note:
- *                 type: string
- *                 example: Lunch
+ *           example:
+ *             amount: 5000
+ *             type: "income"
+ *             category: "Salary"
+ *             date: "2026-04-12"
+ *             note: "Monthly salary"
  *     responses:
  *       201:
- *         description: Record created successfully
+ *         description: Record created
  */
 router.post("/", protect, controller.createRecord);
 
@@ -58,12 +48,10 @@ router.post("/", protect, controller.createRecord);
  *         name: page
  *         schema:
  *           type: number
- *         example: 1
  *       - in: query
  *         name: limit
  *         schema:
  *           type: number
- *         example: 10
  *       - in: query
  *         name: keyword
  *         schema:
@@ -78,7 +66,7 @@ router.post("/", protect, controller.createRecord);
  *           type: string
  *     responses:
  *       200:
- *         description: Records fetched successfully
+ *         description: Records fetched
  */
 router.get("/", protect, controller.getRecords);
 
@@ -96,7 +84,6 @@ router.get("/", protect, controller.getRecords);
  *         required: true
  *         schema:
  *           type: string
- *         example: 69db8a9c295cfa2cc2aecc18
  *     responses:
  *       200:
  *         description: Record fetched successfully
@@ -119,6 +106,14 @@ router.get("/:id", protect, controller.getRecordById);
  *           type: string
  *     requestBody:
  *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             amount: 3000
+ *             type: "expense"
+ *             category: "Food"
+ *             date: "2026-04-12"
+ *             note: "Dinner"
  *     responses:
  *       200:
  *         description: Record updated

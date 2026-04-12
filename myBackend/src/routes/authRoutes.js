@@ -4,6 +4,13 @@ const controller = require("../controllers/authController");
 
 /**
  * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentication APIs
+ */
+
+/**
+ * @swagger
  * /auth/register:
  *   post:
  *     summary: Register a new user

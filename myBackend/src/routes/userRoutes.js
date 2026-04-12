@@ -7,12 +7,22 @@ const { authorize } = require("../middlewares/roleMiddleware");
 
 /**
  * @swagger
+ * tags:
+ *   name: Users
+ *   description: User management APIs
+ */
+
+/**
+ * @swagger
  * /users:
  *   get:
  *     summary: Get all users
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Users fetched successfully
  */
 router.get("/", protect, authorize("admin"), controller.getUsers);
 
@@ -24,6 +34,18 @@ router.get("/", protect, authorize("admin"), controller.getUsers);
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           example:
+ *             name: "User1"
+ *             email: "user1@example.com"
+ *             password: "Admin@123"
+ *             role: "analyst"
+ *     responses:
+ *       201:
+ *         description: User created successfully
  */
 router.post("/", protect, authorize("admin"), controller.createUser);
 
@@ -39,6 +61,16 @@ router.post("/", protect, authorize("admin"), controller.createUser);
  *       - in: path
  *         name: id
  *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           example:
+ *             name: "Updated User"
+ *     responses:
+ *       200:
+ *         description: User updated successfully
  */
 router.put("/:id", protect, authorize("admin"), controller.updateUser);
 
@@ -50,6 +82,15 @@ router.put("/:id", protect, authorize("admin"), controller.updateUser);
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
  */
 router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
 
@@ -61,6 +102,15 @@ router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deactivated successfully
  */
 router.patch("/:id/deactivate", protect, authorize("admin"), controller.deactivateUser);
 

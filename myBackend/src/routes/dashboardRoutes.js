@@ -6,12 +6,22 @@ const { protect } = require("../middlewares/authMiddleware");
 
 /**
  * @swagger
+ * tags:
+ *   name: Dashboard
+ *   description: Dashboard analytics APIs
+ */
+
+/**
+ * @swagger
  * /dashboard/summary:
  *   get:
  *     summary: Get financial summary
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Summary fetched successfully
  */
 router.get("/summary", protect, dashboardController.getSummary);
 
@@ -23,6 +33,9 @@ router.get("/summary", protect, dashboardController.getSummary);
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Categories fetched
  */
 router.get("/categories", protect, dashboardController.getCategories);
 
@@ -34,6 +47,9 @@ router.get("/categories", protect, dashboardController.getCategories);
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Recent transactions
  */
 router.get("/recent", protect, dashboardController.getRecent);
 
@@ -45,6 +61,9 @@ router.get("/recent", protect, dashboardController.getRecent);
  *     tags: [Dashboard]
  *     security:
  *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Trends data
  */
 router.get("/trends", protect, dashboardController.getMonthlyTrends);
 
