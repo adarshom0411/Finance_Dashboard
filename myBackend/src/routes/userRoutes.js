@@ -21,6 +21,60 @@ router.get("/", protect, authorize("admin"), controller.getUsers);
 
 /**
  * @swagger
+ * /users:
+ *   post:
+ *     summary: Create user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       201:
+ *         description: User created
+ */
+router.post("/", protect, authorize("admin"), controller.createUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Update user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User updated
+ */
+router.put("/:id", protect, authorize("admin"), controller.updateUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User deleted
+ */
+router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
+
+/**
+ * @swagger
  * /users/{id}/deactivate:
  *   patch:
  *     summary: Deactivate user
