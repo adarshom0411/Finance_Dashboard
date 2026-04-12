@@ -42,8 +42,8 @@ const buildRecordFilters = (query) => {
 const createRecord = asyncHandler(async (req, res) => {
   const record = await FinancialRecord.create({
     ...req.body,
-    createdBy: req.user._id,
-    updatedBy: req.user._id
+     createdBy: req.user.id || req.user._id,
+     updatedBy: req.user.id || req.user._id
   });
 
   res.status(StatusCodes.CREATED).json({
@@ -124,7 +124,7 @@ const deleteRecord = asyncHandler(async (req, res) => {
   if (!record || record.isDeleted) {
     throw new AppError("Financial record not found.", StatusCodes.NOT_FOUND);
   }
-  
+
   record.isDeleted = true;
   await record.save();
 
