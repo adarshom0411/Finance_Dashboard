@@ -21,10 +21,10 @@ const controller = require("../controllers/authController");
  *             properties:
  *               name:
  *                 type: string
- *                 example: Adarsh Singh
+ *                 example: Admin
  *               email:
  *                 type: string
- *                 example: adarsh@example.com
+ *                 example: admin@example.com
  *               password:
  *                 type: string
  *                 example: Admin@123
