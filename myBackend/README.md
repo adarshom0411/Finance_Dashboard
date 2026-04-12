@@ -94,6 +94,13 @@ A scalable backend system for managing financial records with **role-based acces
 
 ---
 
+## 📬 Postman Collection
+
+- JSON Export: Available in repository (`/postman/finance-dashboard-postman.json`)
+- Import this file into Postman to test all APIs
+
+---
+
 # 🧠 Tech Stack
 
 ## Backend
