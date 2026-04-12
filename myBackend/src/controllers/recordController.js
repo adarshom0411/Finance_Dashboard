@@ -107,7 +107,7 @@ const updateRecord = asyncHandler(async (req, res) => {
     throw new AppError("Financial record not found.", StatusCodes.NOT_FOUND);
   }
 
-  Object.assign(record, req.body, { updatedBy: req.user.id }); // ✅ FIXED
+  Object.assign(record, req.body, { updatedBy: req.user.id });
   await record.save();
 
   res.status(StatusCodes.OK).json({

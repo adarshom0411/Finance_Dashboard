@@ -9,6 +9,7 @@ const rateLimit = require("express-rate-limit");
 const routes = require("./routes");
 const errorHandler = require("./middlewares/errorHandler");
 const notFound = require("./middlewares/notFound");
+const path = require("path");
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(
 
 app.use("/api", routes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(notFound);
 app.use(errorHandler);
 
