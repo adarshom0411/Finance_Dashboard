@@ -8,7 +8,7 @@ const { protect } = require("../middlewares/authMiddleware");
  * @swagger
  * /finance:
  *   post:
- *     summary: Create financial record
+ *     summary: Create a financial record
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
@@ -16,15 +16,32 @@ const { protect } = require("../middlewares/authMiddleware");
  *       required: true
  *       content:
  *         application/json:
- *           example:
- *             amount: 5000
- *             type: "income"
- *             category: "Salary"
- *             date: "2026-04-12"
- *             note: "Monthly salary"
+ *           schema:
+ *             type: object
+ *             required:
+ *               - date
+ *               - category
+ *               - type
+ *               - amount
+ *             properties:
+ *               date:
+ *                 type: string
+ *                 example: 2026-04-12
+ *               category:
+ *                 type: string
+ *                 example: Food
+ *               type:
+ *                 type: string
+ *                 example: expense
+ *               amount:
+ *                 type: number
+ *                 example: 500
+ *               note:
+ *                 type: string
+ *                 example: Lunch
  *     responses:
  *       201:
- *         description: Record created
+ *         description: Record created successfully
  */
 router.post("/", protect, controller.createRecord);
 
@@ -41,13 +58,27 @@ router.post("/", protect, controller.createRecord);
  *         name: page
  *         schema:
  *           type: number
+ *         example: 1
  *       - in: query
  *         name: limit
  *         schema:
  *           type: number
+ *         example: 10
+ *       - in: query
+ *         name: keyword
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Records fetched
+ *         description: Records fetched successfully
  */
 router.get("/", protect, controller.getRecords);
 
@@ -65,6 +96,10 @@ router.get("/", protect, controller.getRecords);
  *         required: true
  *         schema:
  *           type: string
+ *         example: 69db8a9c295cfa2cc2aecc18
+ *     responses:
+ *       200:
+ *         description: Record fetched successfully
  */
 router.get("/:id", protect, controller.getRecordById);
 
@@ -84,14 +119,9 @@ router.get("/:id", protect, controller.getRecordById);
  *           type: string
  *     requestBody:
  *       required: true
- *       content:
- *         application/json:
- *           example:
- *             amount: 3000
- *             type: "expense"
- *             category: "Food"
- *             date: "2026-04-12"
- *             note: "Dinner"
+ *     responses:
+ *       200:
+ *         description: Record updated
  */
 router.put("/:id", protect, controller.updateRecord);
 
@@ -109,6 +139,9 @@ router.put("/:id", protect, controller.updateRecord);
  *         required: true
  *         schema:
  *           type: string
+ *     responses:
+ *       200:
+ *         description: Record deleted
  */
 router.delete("/:id", protect, controller.deleteRecord);
 

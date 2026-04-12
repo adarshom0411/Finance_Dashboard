@@ -24,15 +24,6 @@ router.get("/", protect, authorize("admin"), controller.getUsers);
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           example:
- *             name: "User1"
- *             email: "user1@example.com"
- *             password: "Admin@123"
- *             role: "analyst"
  */
 router.post("/", protect, authorize("admin"), controller.createUser);
 
@@ -48,13 +39,6 @@ router.post("/", protect, authorize("admin"), controller.createUser);
  *       - in: path
  *         name: id
  *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       content:
- *         application/json:
- *           example:
- *             name: "Updated User"
  */
 router.put("/:id", protect, authorize("admin"), controller.updateUser);
 
@@ -66,12 +50,6 @@ router.put("/:id", protect, authorize("admin"), controller.updateUser);
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
  */
 router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
 
@@ -83,12 +61,6 @@ router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
  */
 router.patch("/:id/deactivate", protect, authorize("admin"), controller.deactivateUser);
 
