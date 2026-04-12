@@ -23,6 +23,11 @@ const financialRecordSchema = new mongoose.Schema(
       type: String
     },
 
+    createdBy: {
+  type: require("mongoose").Schema.Types.ObjectId,
+  ref: "User"
+   },
+
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
