@@ -19,7 +19,9 @@ const {
 
 const router = express.Router();
 
-router.use(authenticate);
+const { protect } = require("../middlewares/authMiddleware");
+
+router.use(protect);
 
 /**
  * @swagger
