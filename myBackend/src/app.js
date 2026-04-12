@@ -1,5 +1,5 @@
 const swaggerUi = require("swagger-ui-express");
-const swaggerSpec = require("./swagger");
+const swaggerSpec = require("./config/swagger");
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
@@ -12,8 +12,14 @@ const notFound = require("./middlewares/notFound");
 
 const app = express();
 
+app.use(
+  cors({
+    origin: "*", // allow all origins (safe for assignment/demo)
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
-app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
 
