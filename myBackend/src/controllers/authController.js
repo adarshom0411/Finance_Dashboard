@@ -1,74 +1,31 @@
-const bcrypt = require("bcryptjs");
-const jwt = require("../utils/jwt");
-const User = require("../models/User");
-const AppError = require("../utils/AppError");
+const asyncHandler = require("../utils/asyncHandler");
+const authService = require("../services/authService");
 
-exports.register = async (data) => {
-  const { name, email, password } = data;
+exports.register = asyncHandler(async (req, res) => {
 
-  // ✅ ADDED: input validation (prevents bcrypt crash)
-  if (!name || !email || !password) {
-    throw new AppError("Name, email and password are required", 400);
+  // ✅ ADDED: basic safety check (prevents undefined issues)
+  if (!req.body || !req.body.password) {
+    return res.status(400).json({
+      success: false,
+      message: "Password is required"
+    });
   }
 
-  const existingUser = await User.findOne({ email });
-  if (existingUser) {
-    throw new AppError("User already exists", 400);
-  }
+  // ❌ REMOVED: bcrypt hashing from controller
+  const user = await authService.register(req.body);
 
-  // ✅ SAFE: password guaranteed defined now
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = await User.create({
-    name,
-    email,
-    password: hashedPassword
+  res.status(201).json({
+    success: true,
+    data: user
   });
+});
 
-  return {
-    id: user._id,
-    name: user.name,
-    email: user.email,
-    role: user.role
-  };
-};
+exports.login = asyncHandler(async (req, res) => {
 
-exports.login = async ({ email, password }) => {
+  const data = await authService.login(req.body);
 
-  // ✅ ADDED: input validation
-  if (!email || !password) {
-    throw new AppError("Email and password are required", 400);
-  }
-
-  const user = await User.findOne({ email }).select("+password");
-
-  // ✅ EXTRA SAFETY (prevents bcrypt crash)
-  if (!user || !user.password) {
-    throw new AppError("Invalid credentials", 401);
-  }
-
-  const isMatch = await bcrypt.compare(password, user.password);
-
-  if (!isMatch) {
-    throw new AppError("Invalid credentials", 401);
-  }
-
-  if (!user.isActive) {
-    throw new AppError("User account is inactive", 403);
-  }
-
-  const token = jwt.generateToken({
-    sub: user._id,
-    role: user.role
+  res.json({
+    success: true,
+    data
   });
-
-  return {
-    token,
-    user: {
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role
-    }
-  };
-};
+});
