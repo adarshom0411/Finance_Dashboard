@@ -6,7 +6,83 @@ const options = {
     info: {
       title: "Finance Dashboard API",
       version: "1.0.0",
-      description: "🚀 API documentation for Finance Dashboard backend with Auth, Records & Analytics"
+
+      // ✅ UPDATED (PORTFOLIO-LEVEL DESCRIPTION ONLY)
+      description: `
+🚀 **Finance Dashboard Backend API**
+
+A production-ready backend system built with Node.js, Express, and MongoDB, featuring authentication, role-based access control, financial record management, and analytics.
+
+---
+
+### 👨‍💻 Developer
+**Adarsh Singh**
+
+🔗 GitHub: https://github.com/YOUR_GITHUB_USERNAME
+
+---
+
+### 🧩 Features
+- 🔐 JWT Authentication
+- 🛡️ Role-Based Access Control (RBAC)
+- 💰 Financial Records CRUD
+- 📊 Dashboard Analytics (Summary, Trends, Categories)
+- 📄 Pagination, Filtering & Sorting
+- ⚡ Secure API with Rate Limiting & Helmet
+
+---
+
+### 🚀 Quick Start Guide
+
+1️⃣ Register/Login  
+2️⃣ Copy JWT Token  
+3️⃣ Click 🔒 Authorize  
+4️⃣ Paste:
+\`\`\`
+Bearer YOUR_TOKEN
+\`\`\`
+5️⃣ Start using APIs  
+
+---
+
+### 📌 Example Flow
+
+👉 Login:
+\`\`\`json
+POST /auth/login
+{
+  "email": "admin@example.com",
+  "password": "Admin@123"
+}
+\`\`\`
+
+👉 Use Token:
+\`\`\`
+Authorization: Bearer YOUR_TOKEN
+\`\`\`
+
+👉 Create Record:
+\`\`\`json
+POST /records
+{
+  "amount": 5000,
+  "type": "income",
+  "category": "Salary",
+  "date": "2026-04-13"
+}
+\`\`\`
+
+---
+
+### 🏷️ API Capabilities
+- ✅ Authentication
+- ✅ RBAC Authorization
+- ✅ CRUD Operations
+- ✅ Analytics Dashboard
+- ✅ Production Ready
+
+---
+`
     },
 
     // ✅ ADDED (clean server description)
@@ -145,7 +221,7 @@ const options = {
                 records: {
                   type: "array",
                   items: {
-                    $ref: "#/components/schemas/FinancialRecord" // ✅ ADDED
+                    $ref: "#/components/schemas/FinancialRecord"
                   }
                 }
               }
