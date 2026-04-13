@@ -2,7 +2,10 @@ const FinancialRecord = require("../models/FinancialRecord");
 
 exports.getSummary = async (req, res, next) => {
   try {
-    const records = await FinancialRecord.find();
+    const records = await FinancialRecord.find({
+      createdBy: req.user.id || req.user._id,
+      isDeleted: { $ne: true }
+    });
 
     const totalIncome = records
       .filter((r) => r.type === "income")
@@ -31,9 +34,24 @@ exports.getCategories = async (req, res, next) => {
   try {
     const data = await FinancialRecord.aggregate([
       {
+        $match: {
+          createdBy: req.user._id,
+          isDeleted: { $ne: true }
+        }
+      },
+      {
         $group: {
           _id: "$category",
-          total: { $sum: "$amount" }
+          totalIncome: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "income"] }, "$amount", 0]
+            }
+          },
+          totalExpense: {
+            $sum: {
+              $cond: [{ $eq: ["$type", "expense"] }, "$amount", 0]
+            }
+          }
         }
       }
     ]);
@@ -49,7 +67,10 @@ exports.getCategories = async (req, res, next) => {
 
 exports.getRecent = async (req, res, next) => {
   try {
-    const records = await FinancialRecord.find()
+    const records = await FinancialRecord.find({
+      createdBy: req.user.id || req.user._id,
+      isDeleted: { $ne: true }
+    })
       .sort({ createdAt: -1 })
       .limit(5);
 
@@ -65,6 +86,12 @@ exports.getRecent = async (req, res, next) => {
 exports.getMonthlyTrends = async (req, res, next) => {
   try {
     const data = await FinancialRecord.aggregate([
+      {
+        $match: {
+          createdBy: req.user._id,
+          isDeleted: { $ne: true }
+        }
+      },
       {
         $group: {
           _id: {

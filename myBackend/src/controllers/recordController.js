@@ -1,5 +1,4 @@
 const { StatusCodes } = require("http-status-codes");
-
 const FinancialRecord = require("../models/FinancialRecord");
 const AppError = require("../utils/AppError");
 const asyncHandler = require("../utils/asyncHandler");
@@ -7,24 +6,25 @@ const asyncHandler = require("../utils/asyncHandler");
 const buildRecordFilters = (query) => {
   const filters = {};
 
-  if (query.type) {
+  const allowedTypes = ["income", "expense"];
+  if (query.type && allowedTypes.includes(query.type)) {
     filters.type = query.type;
   }
 
   if (query.category) {
-    filters.category = query.category;
+    filters.category = { $regex: `^${query.category}$`, $options: "i" };
   }
 
   if (query.startDate || query.endDate) {
     filters.date = {};
-  }
 
-  if (query.startDate) {
-    filters.date.$gte = new Date(query.startDate);
-  }
+    if (query.startDate) {
+      filters.date.$gte = new Date(query.startDate);
+    }
 
-  if (query.endDate) {
-    filters.date.$lte = new Date(query.endDate);
+    if (query.endDate) {
+      filters.date.$lte = new Date(query.endDate);
+    }
   }
 
   if (query.keyword) {
@@ -42,8 +42,8 @@ const buildRecordFilters = (query) => {
 const createRecord = asyncHandler(async (req, res) => {
   const record = await FinancialRecord.create({
     ...req.body,
-     createdBy: req.user.id || req.user._id,
-     updatedBy: req.user.id || req.user._id
+    createdBy: req.user.id || req.user._id,
+    updatedBy: req.user.id || req.user._id
   });
 
   res.status(StatusCodes.CREATED).json({
@@ -54,16 +54,21 @@ const createRecord = asyncHandler(async (req, res) => {
   });
 });
 
-
 const listRecords = asyncHandler(async (req, res) => {
   const page = Number(req.query.page) || 1;
   const limit = Number(req.query.limit) || 10;
   const skip = (page - 1) * limit;
+
   const filters = buildRecordFilters(req.query);
+
+  //user-based data isolation
+  filters.createdBy = req.user.id || req.user._id;
+
+  const sortBy = req.query.sort || "-date";
 
   const [records, total] = await Promise.all([
     FinancialRecord.find(filters)
-      .sort({ date: -1, createdAt: -1 })
+      .sort(sortBy)
       .skip(skip)
       .limit(limit)
       .populate("createdBy", "name email role")
@@ -72,6 +77,7 @@ const listRecords = asyncHandler(async (req, res) => {
   ]);
 
   res.status(StatusCodes.OK).json({
+    success: true,
     data: {
       page,
       limit,
@@ -81,7 +87,6 @@ const listRecords = asyncHandler(async (req, res) => {
     }
   });
 });
-
 
 const getRecordById = asyncHandler(async (req, res) => {
   const record = await FinancialRecord.findById(req.params.id)
@@ -98,7 +103,6 @@ const getRecordById = asyncHandler(async (req, res) => {
     }
   });
 });
-
 
 const updateRecord = asyncHandler(async (req, res) => {
   const record = await FinancialRecord.findById(req.params.id);
@@ -132,7 +136,6 @@ const deleteRecord = asyncHandler(async (req, res) => {
     message: "Financial record soft deleted successfully."
   });
 });
-
 
 module.exports = {
   buildRecordFilters,

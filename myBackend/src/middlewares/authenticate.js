@@ -15,13 +15,14 @@ const authenticate = async (req, res, next) => {
 
   try {
     const payload = verifyToken(token);
-    const user = await User.findById(payload.sub);
+
+    const user = await User.findById(payload.sub).select("+password");
 
     if (!user) {
       return next(new AppError("User associated with the token no longer exists.", StatusCodes.UNAUTHORIZED));
     }
 
-    if (user.status !== "active") {
+    if (!user.isActive) {
       return next(new AppError("User account is inactive.", StatusCodes.FORBIDDEN));
     }
 
