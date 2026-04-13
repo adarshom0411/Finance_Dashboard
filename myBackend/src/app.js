@@ -76,8 +76,8 @@ app.use(
       }
 
       .swagger-ui .btn.authorize {
-        background: #38bdf8;
-        color: black;
+        background: #a277ed;
+        color: white;
         border-radius: 8px;
         font-weight: bold;
       }
