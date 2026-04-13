@@ -21,7 +21,12 @@ app.use(
   })
 );
 app.options("*", cors());
-app.use(express.json());
+
+// ✅ FIX: handle invalid JSON safely
+app.use(express.json({
+  limit: "10kb"
+}));
+
 app.use(helmet());
 app.use(morgan("dev"));
 
@@ -32,9 +37,13 @@ app.use(
   })
 );
 
-app.use("/api", routes);
+// ✅ FIX: Swagger before routes (better practice)
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use("/api", routes);
+
 app.use(express.static(path.join(__dirname, "../public")));
+
 app.use(notFound);
 app.use(errorHandler);
 
