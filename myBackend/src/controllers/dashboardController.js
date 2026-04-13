@@ -1,9 +1,12 @@
 const FinancialRecord = require("../models/FinancialRecord");
+const mongoose = require("mongoose"); // ✅ ADDED
 
 exports.getSummary = async (req, res, next) => {
   try {
+    const userId = req.user.id || req.user._id; // ✅ FIXED
+
     const records = await FinancialRecord.find({
-      createdBy: req.user.id || req.user._id,
+      createdBy: userId,
       isDeleted: { $ne: true }
     });
 
@@ -32,10 +35,12 @@ exports.getSummary = async (req, res, next) => {
 
 exports.getCategories = async (req, res, next) => {
   try {
+    const userId = req.user.id || req.user._id; // ✅ FIXED
+
     const data = await FinancialRecord.aggregate([
       {
         $match: {
-          createdBy: req.user._id,
+          createdBy: new mongoose.Types.ObjectId(userId), // ✅ FIXED
           isDeleted: { $ne: true }
         }
       },
@@ -67,8 +72,10 @@ exports.getCategories = async (req, res, next) => {
 
 exports.getRecent = async (req, res, next) => {
   try {
+    const userId = req.user.id || req.user._id; // ✅ FIXED
+
     const records = await FinancialRecord.find({
-      createdBy: req.user.id || req.user._id,
+      createdBy: userId,
       isDeleted: { $ne: true }
     })
       .sort({ createdAt: -1 })
@@ -85,10 +92,12 @@ exports.getRecent = async (req, res, next) => {
 
 exports.getMonthlyTrends = async (req, res, next) => {
   try {
+    const userId = req.user.id || req.user._id; // ✅ FIXED
+
     const data = await FinancialRecord.aggregate([
       {
         $match: {
-          createdBy: req.user._id,
+          createdBy: new mongoose.Types.ObjectId(userId), // ✅ FIXED
           isDeleted: { $ne: true }
         }
       },
