@@ -6,11 +6,17 @@ const AppError = require("../utils/AppError");
 exports.register = async (data) => {
   const { name, email, password } = data;
 
+  // ✅ ADDED: input validation (prevents bcrypt crash)
+  if (!name || !email || !password) {
+    throw new AppError("Name, email and password are required", 400);
+  }
+
   const existingUser = await User.findOne({ email });
   if (existingUser) {
     throw new AppError("User already exists", 400);
   }
 
+  // ✅ SAFE: password guaranteed defined now
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await User.create({
@@ -29,8 +35,14 @@ exports.register = async (data) => {
 
 exports.login = async ({ email, password }) => {
 
+  // ✅ ADDED: input validation
+  if (!email || !password) {
+    throw new AppError("Email and password are required", 400);
+  }
+
   const user = await User.findOne({ email }).select("+password");
 
+  // ✅ EXTRA SAFETY (prevents bcrypt crash)
   if (!user || !user.password) {
     throw new AppError("Invalid credentials", 401);
   }
