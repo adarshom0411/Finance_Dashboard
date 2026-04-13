@@ -37,7 +37,7 @@ app.use(
   })
 );
 
-// ✅🔥 PREMIUM SWAGGER UI (ADDED)
+// ✅🔥 PREMIUM + ULTIMATE SWAGGER UI (ONLY ADDITIONS)
 app.use(
   "/api-docs",
   swaggerUi.serve,
@@ -95,11 +95,35 @@ app.use(
         border: 1px solid #334155;
         border-radius: 6px;
       }
+
+      /* ================== 🆕 GLASS UI ================== */
+      .swagger-ui .opblock,
+      .swagger-ui .info,
+      .swagger-ui .scheme-container {
+        background: rgba(255,255,255,0.08) !important;
+        backdrop-filter: blur(12px);
+      }
+
+      /* ================== 🆕 LIGHT MODE ================== */
+      body.light-mode {
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0) !important;
+      }
+
+      body.light-mode .swagger-ui,
+      body.light-mode .swagger-ui * {
+        color: #0f172a !important;
+      }
+
+      body.light-mode .swagger-ui .opblock {
+        background: rgba(255,255,255,0.7) !important;
+      }
     `,
 
-    // ✅🔥 BADGES + VERSION + COPY TOKEN BUTTON
+    // ✅🔥 ULTIMATE FEATURES (ONLY ADDITIONS)
     customJs: `
       window.onload = function() {
+
+        /* ================= BADGES ================= */
         const topbar = document.querySelector('.topbar-wrapper');
 
         if (topbar) {
@@ -116,38 +140,79 @@ app.use(
           topbar.appendChild(badge);
         }
 
-        // ✅ COPY TOKEN BUTTON
+        /* ================= LANDING SECTION ================= */
+        const wrapper = document.querySelector('.swagger-ui .wrapper');
+
+        const intro = document.createElement('div');
+        intro.innerHTML = \`
+          <div style="padding:20px;margin-bottom:20px;border-radius:12px;background:rgba(255,255,255,0.08);">
+            <h2>🚀 Finance API</h2>
+            <p>Auth • RBAC • Analytics • CRUD</p>
+            <ol>
+              <li>Login → get token</li>
+              <li>Authorize 🔐</li>
+              <li>Use APIs</li>
+            </ol>
+          </div>
+        \`;
+
+        wrapper.prepend(intro);
+
+        /* ================= SEARCH ================= */
+        const search = document.createElement('input');
+        search.placeholder = "🔍 Search APIs...";
+        search.style.cssText = "width:100%;padding:10px;margin-bottom:15px;border-radius:8px;";
+
+        wrapper.prepend(search);
+
+        search.addEventListener('input', () => {
+          const val = search.value.toLowerCase();
+          document.querySelectorAll('.opblock').forEach(b => {
+            b.style.display = b.innerText.toLowerCase().includes(val) ? 'block' : 'none';
+          });
+        });
+
+        /* ================= COPY TOKEN ================= */
         setTimeout(() => {
           const authWrapper = document.querySelector('.auth-wrapper');
 
           if (authWrapper) {
             const btn = document.createElement('button');
-
             btn.innerText = "📋 Copy Token";
-            btn.style.marginLeft = "10px";
-            btn.style.padding = "6px 10px";
-            btn.style.borderRadius = "6px";
-            btn.style.background = "#22c55e";
-            btn.style.color = "black";
-            btn.style.fontWeight = "bold";
-            btn.style.cursor = "pointer";
+            btn.className = "btn";
 
             btn.onclick = () => {
               const input = document.querySelector('input[type="text"]');
-
-              if (input && input.value) {
-                navigator.clipboard.writeText(input.value);
-                btn.innerText = "✅ Copied!";
-                setTimeout(() => (btn.innerText = "📋 Copy Token"), 2000);
-              } else {
-                btn.innerText = "⚠️ No Token";
-                setTimeout(() => (btn.innerText = "📋 Copy Token"), 2000);
-              }
+              if (input) navigator.clipboard.writeText(input.value);
             };
 
             authWrapper.appendChild(btn);
           }
         }, 1500);
+
+        /* ================= DARK/LIGHT ================= */
+        const toggle = document.createElement('button');
+        toggle.innerText = "🌗 Mode";
+        toggle.className = "btn";
+        toggle.onclick = () => document.body.classList.toggle('light-mode');
+
+        document.querySelector('.topbar').appendChild(toggle);
+
+        /* ================= SIDEBAR ================= */
+        const sidebar = document.createElement('div');
+        sidebar.style.cssText = "position:fixed;left:10px;top:120px;width:200px;background:rgba(255,255,255,0.08);padding:10px;border-radius:10px;";
+        document.body.appendChild(sidebar);
+
+        setTimeout(() => {
+          document.querySelectorAll('.opblock-tag-section').forEach((sec,i) => {
+            const link = document.createElement('div');
+            link.innerText = sec.querySelector('h3 span')?.innerText;
+            link.style.cursor = "pointer";
+            link.onclick = () => sec.scrollIntoView({behavior:'smooth'});
+            sidebar.appendChild(link);
+          });
+        },1000);
+
       };
     `,
 
