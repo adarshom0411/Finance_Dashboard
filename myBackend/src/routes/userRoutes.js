@@ -17,12 +17,24 @@ const { authorize } = require("../middlewares/roleMiddleware");
  * /users:
  *   get:
  *     summary: Get all users
+ *     description: Fetch all users (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Users fetched successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 - id: "661f1c2a9c1234567890abcd"
+ *                   name: "Adarsh"
+ *                   email: "adarsh@gmail.com"
+ *                   role: "admin"
+ *       403:
+ *         description: Forbidden (Admin only)
  */
 router.get("/", protect, authorize("admin"), controller.getUsers);
 
@@ -31,6 +43,7 @@ router.get("/", protect, authorize("admin"), controller.getUsers);
  * /users:
  *   post:
  *     summary: Create user
+ *     description: Create a new user (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -46,6 +59,15 @@ router.get("/", protect, authorize("admin"), controller.getUsers);
  *     responses:
  *       201:
  *         description: User created successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 id: "661f1c2a9c1234567890abcd"
+ *                 name: "User1"
+ *                 email: "user1@example.com"
+ *                 role: "analyst"
  */
 router.post("/", protect, authorize("admin"), controller.createUser);
 
@@ -54,6 +76,7 @@ router.post("/", protect, authorize("admin"), controller.createUser);
  * /users/{id}:
  *   put:
  *     summary: Update user
+ *     description: Update user details (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -79,6 +102,7 @@ router.put("/:id", protect, authorize("admin"), controller.updateUser);
  * /users/{id}:
  *   delete:
  *     summary: Delete user
+ *     description: Permanently delete a user (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -99,6 +123,7 @@ router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
  * /users/{id}/deactivate:
  *   patch:
  *     summary: Deactivate user
+ *     description: Mark user as inactive (Admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -111,6 +136,11 @@ router.delete("/:id", protect, authorize("admin"), controller.deleteUser);
  *     responses:
  *       200:
  *         description: User deactivated successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               message: "User deactivated successfully"
  */
 router.patch("/:id/deactivate", protect, authorize("admin"), controller.deactivateUser);
 

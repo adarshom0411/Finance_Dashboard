@@ -28,6 +28,7 @@ router.use(protect);
  * /records:
  *   get:
  *     summary: Get all records (with filters, pagination, sorting)
+ *     description: Fetch paginated financial records with optional filters like type, category, date range and keyword search
  *     tags: [Records]
  *     security:
  *       - bearerAuth: []
@@ -86,14 +87,12 @@ router.use(protect);
  *         description: Unauthorized
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *             $ref: '#/components/schemas/ErrorResponse'
  *       403:
  *         description: Forbidden
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *             $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/", authorize("records:read"), validate(listRecordsValidation), listRecords);
 
@@ -102,6 +101,7 @@ router.get("/", authorize("records:read"), validate(listRecordsValidation), list
  * /records/{id}:
  *   get:
  *     summary: Get record by ID
+ *     description: Fetch a single financial record using its ID
  *     tags: [Records]
  *     security:
  *       - bearerAuth: []
@@ -113,21 +113,24 @@ router.get("/", authorize("records:read"), validate(listRecordsValidation), list
  *           type: string
  *     responses:
  *       200:
- *         description: Record fetched
+ *         description: Record fetched successfully
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: object
- *                   properties:
- *                     record:
- *                       $ref: '#/components/schemas/FinancialRecord'
+ *             example:
+ *               success: true
+ *               data:
+ *                 record:
+ *                   _id: "661f1c2a9c1234567890abcd"
+ *                   amount: 500
+ *                   type: "expense"
+ *                   category: "Food"
+ *                   date: "2026-04-13T00:00:00.000Z"
+ *                   note: "Lunch"
  *       404:
  *         description: Record not found
+ *         content:
+ *           application/json:
+ *             $ref: '#/components/schemas/ErrorResponse'
  */
 router.get("/:id", authorize("records:read"), validate(recordIdValidation), getRecordById);
 
@@ -136,6 +139,7 @@ router.get("/:id", authorize("records:read"), validate(recordIdValidation), getR
  * /records:
  *   post:
  *     summary: Create a new record
+ *     description: Add a new financial record (income or expense)
  *     tags: [Records]
  *     security:
  *       - bearerAuth: []
@@ -143,15 +147,30 @@ router.get("/:id", authorize("records:read"), validate(recordIdValidation), getR
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/FinancialRecord'
+ *           example:
+ *             amount: 5000
+ *             type: "income"
+ *             category: "Salary"
+ *             date: "2026-04-13"
+ *             note: "Monthly salary"
  *     responses:
  *       201:
  *         description: Record created successfully
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
+ *             example:
+ *               success: true
+ *               data:
+ *                 record:
+ *                   _id: "661f1c2a9c1234567890abcd"
+ *                   amount: 5000
+ *                   type: "income"
+ *                   category: "Salary"
+ *       400:
+ *         description: Validation error
+ *         content:
+ *           application/json:
+ *             $ref: '#/components/schemas/ErrorResponse'
  */
 router.post("/", authorize("records:write"), validate(createRecordValidation), createRecord);
 
@@ -160,6 +179,7 @@ router.post("/", authorize("records:write"), validate(createRecordValidation), c
  * /records/{id}:
  *   patch:
  *     summary: Update record
+ *     description: Update fields of an existing financial record
  *     tags: [Records]
  *     security:
  *       - bearerAuth: []
@@ -172,17 +192,19 @@ router.post("/", authorize("records:write"), validate(createRecordValidation), c
  *     requestBody:
  *       content:
  *         application/json:
- *           schema:
- *             example:
- *               amount: 500
- *               category: "Food"
+ *           example:
+ *             amount: 500
+ *             category: "Food"
  *     responses:
  *       200:
- *         description: Record updated
+ *         description: Record updated successfully
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
+ *             example:
+ *               success: true
+ *               message: "Financial record updated successfully."
+ *       404:
+ *         description: Record not found
  */
 router.patch("/:id", authorize("records:write"), validate(updateRecordValidation), updateRecord);
 
@@ -191,6 +213,7 @@ router.patch("/:id", authorize("records:write"), validate(updateRecordValidation
  * /records/{id}:
  *   delete:
  *     summary: Delete record (soft delete)
+ *     description: Marks a record as deleted without removing it from database
  *     tags: [Records]
  *     security:
  *       - bearerAuth: []
@@ -202,11 +225,12 @@ router.patch("/:id", authorize("records:write"), validate(updateRecordValidation
  *           type: string
  *     responses:
  *       200:
- *         description: Record deleted
+ *         description: Record deleted successfully
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/SuccessResponse'
+ *             example:
+ *               success: true
+ *               message: "Financial record soft deleted successfully."
  */
 router.delete("/:id", authorize("records:write"), validate(recordIdValidation), deleteRecord);
 

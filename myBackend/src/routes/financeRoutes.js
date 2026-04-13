@@ -16,6 +16,7 @@ const { protect } = require("../middlewares/authMiddleware");
  * /finance:
  *   post:
  *     summary: Create financial record
+ *     description: Add a new income or expense record
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
@@ -31,7 +32,13 @@ const { protect } = require("../middlewares/authMiddleware");
  *             note: "Monthly salary"
  *     responses:
  *       201:
- *         description: Record created
+ *         description: Record created successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data:
+ *                 _id: "661f1c2a9c1234567890abcd"
  */
 router.post("/", protect, controller.createRecord);
 
@@ -40,6 +47,7 @@ router.post("/", protect, controller.createRecord);
  * /finance:
  *   get:
  *     summary: Get all records
+ *     description: Fetch financial records with optional filters and pagination
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
@@ -60,13 +68,19 @@ router.post("/", protect, controller.createRecord);
  *         name: type
  *         schema:
  *           type: string
+ *           enum: [income, expense]
  *       - in: query
  *         name: category
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Records fetched
+ *         description: Records fetched successfully
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: true
+ *               data: []
  */
 router.get("/", protect, controller.getRecords);
 
@@ -75,6 +89,7 @@ router.get("/", protect, controller.getRecords);
  * /finance/{id}:
  *   get:
  *     summary: Get record by ID
+ *     description: Fetch a single financial record
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
@@ -95,6 +110,7 @@ router.get("/:id", protect, controller.getRecordById);
  * /finance/{id}:
  *   put:
  *     summary: Update record
+ *     description: Update financial record details
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
@@ -116,7 +132,7 @@ router.get("/:id", protect, controller.getRecordById);
  *             note: "Dinner"
  *     responses:
  *       200:
- *         description: Record updated
+ *         description: Record updated successfully
  */
 router.put("/:id", protect, controller.updateRecord);
 
@@ -125,6 +141,7 @@ router.put("/:id", protect, controller.updateRecord);
  * /finance/{id}:
  *   delete:
  *     summary: Delete record
+ *     description: Delete a financial record permanently
  *     tags: [Finance]
  *     security:
  *       - bearerAuth: []
@@ -136,7 +153,7 @@ router.put("/:id", protect, controller.updateRecord);
  *           type: string
  *     responses:
  *       200:
- *         description: Record deleted
+ *         description: Record deleted successfully
  */
 router.delete("/:id", protect, controller.deleteRecord);
 
