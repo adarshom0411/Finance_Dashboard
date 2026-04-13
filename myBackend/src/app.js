@@ -123,6 +123,16 @@ app.use(
     customJs: `
       window.onload = function() {
 
+      toggle.onclick = () => {
+  document.body.classList.toggle('light-mode');
+
+  if (document.body.classList.contains('light-mode')) {
+    toggle.innerText = "🌞 Light";
+  } else {
+    toggle.innerText = "🌙 Dark";
+  }
+};
+
         /* ================= BADGES ================= */
         const topbar = document.querySelector('.topbar-wrapper');
 
@@ -214,6 +224,87 @@ app.use(
         },1000);
 
       };
+      /* =========================
+   🟢 FIX LIGHT MODE (OVERRIDE DARK)
+========================= */
+
+body.light-mode {
+  background: #f8fafc !important;
+}
+
+/* Main containers */
+body.light-mode .swagger-ui .opblock,
+body.light-mode .swagger-ui .info,
+body.light-mode .swagger-ui .scheme-container {
+  background: white !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+/* Text fix */
+body.light-mode .swagger-ui,
+body.light-mode .swagger-ui * {
+  color: #0f172a !important;
+}
+
+/* Code blocks */
+body.light-mode .swagger-ui .highlight-code {
+  background: #f1f5f9 !important;
+  color: black !important;
+}
+
+/* Inputs */
+body.light-mode .swagger-ui input,
+body.light-mode .swagger-ui textarea {
+  background: white !important;
+  color: black !important;
+  border: 1px solid #cbd5f5 !important;
+}
+
+/* Buttons */
+body.light-mode .swagger-ui .btn {
+  background: #e2e8f0 !important;
+  color: black !important;
+}
+
+/* =========================
+   🔐 FIX AUTHORIZE BUTTON
+========================= */
+
+/* Always visible */
+.swagger-ui .btn.authorize {
+  background: linear-gradient(135deg, #22c55e, #06b6d4) !important;
+  color: white !important;
+  font-weight: bold;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover fix */
+.swagger-ui .btn.authorize:hover {
+  opacity: 0.9;
+}
+
+/* Light mode fix */
+body.light-mode .swagger-ui .btn.authorize {
+  background: linear-gradient(135deg, #16a34a, #0284c7) !important;
+  color: white !important;
+}
+
+/* =========================
+   🧊 FIX GLASS OVERDARK ISSUE
+========================= */
+
+.swagger-ui .opblock {
+  background: rgba(255,255,255,0.08) !important;
+}
+
+body.light-mode .swagger-ui .opblock {
+  background: white !important;
+}
     `,
 
     swaggerOptions: {
